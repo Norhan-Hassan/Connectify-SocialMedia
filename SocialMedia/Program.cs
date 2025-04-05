@@ -1,4 +1,6 @@
 
+using SocialMedia.HUBs;
+
 namespace SocialMedia
 {
     public class Program
@@ -27,7 +29,8 @@ namespace SocialMedia
 
             app.UseAuthorization();
 
-
+            app.MapHub<ChatHub>("Chat");
+            app.MapHub<PostHub>("Post");
             app.MapControllers();
 
             app.Run();
