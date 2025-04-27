@@ -4,5 +4,6 @@ namespace SocialMedia.Models
 {
     public class User:IdentityUser
     {
+
     }
 }
