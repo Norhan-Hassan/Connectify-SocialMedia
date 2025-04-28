@@ -14,11 +14,8 @@ namespace SocialMedia.Data
             
         }
 
-        public DbSet<User> ApplicationUser { get; set; }
-        public DbSet<ChatGroup> ChatGroups { get; set; }
-        public DbSet<ChatGroubUser> ChatGroubUsers { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<UserConnection> UserConnections { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationUserConnection> UserConnections { get; set; }
 
     }
 }
