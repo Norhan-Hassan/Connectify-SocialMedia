@@ -8,8 +8,14 @@ namespace SocialMedia.Mapping
     {
         public MappingProfile()
         {
-         
-                
+            #region ApplicationUser Mapping
+
+            CreateMap<ApplicationUser, RegisterDto>()
+                .ForMember(dest => dest.Name, src => src.MapFrom(src => src.UserName))
+                .ReverseMap();
+
+            #endregion
+
         }
     }
 }
