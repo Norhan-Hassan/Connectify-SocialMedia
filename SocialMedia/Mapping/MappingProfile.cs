@@ -13,6 +13,9 @@ namespace SocialMedia.Mapping
             CreateMap<ApplicationUser, RegisterDto>()
                 .ForMember(dest => dest.Name, src => src.MapFrom(src => src.UserName))
                 .ReverseMap();
+            CreateMap<ApplicationUser, MemberDto>()
+                .ForMember(dest=>dest.Gender, src=>src.MapFrom(src=>src.Gender.ToString()));
+                
 
             #endregion
 

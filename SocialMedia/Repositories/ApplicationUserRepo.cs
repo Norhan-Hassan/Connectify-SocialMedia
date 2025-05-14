@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using SocialMedia.Data;
 using SocialMedia.DTOs;
-using SocialMedia.Helpers;
 using SocialMedia.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -28,6 +24,23 @@ namespace SocialMedia.Repositories
             _mapper = mapper;
             _context = context;
         }
+
+        public async Task<IEnumerable<ApplicationUser>> GetUsersAsync()
+        {
+            var users = await _context.ApplicationUsers.ToListAsync();
+            return users;
+        }
+
+        public async Task<ApplicationUser> GetUserById(int id)
+        {
+            return await _context.ApplicationUsers.FindAsync(id);
+        }
+
+        public async Task<ApplicationUser> GetUserByName(string name)
+        {
+            return await _context.ApplicationUsers.SingleOrDefaultAsync(u => u.UserName == name);
+        }
+
 
         public async Task<LoginResponse> Login(LoginDto loginDto)
         {
@@ -65,7 +78,7 @@ namespace SocialMedia.Repositories
                         Expired = token.ValidTo
                     };
                 }
-               
+
             }
             return null;
         }
@@ -80,11 +93,16 @@ namespace SocialMedia.Repositories
                 IdentityResult result = await _userManager.CreateAsync(applicationUser, registerDto.Password);
 
                 return result;
-               
+
             }
             else
-            return IdentityResult.Failed(new IdentityError { Description = "User Name already exists" }); ;
+                return IdentityResult.Failed(new IdentityError { Description = "User Name already exists" });
 
+        }
+
+        public void Update(ApplicationUser user)
+        {
+            _context.Entry<ApplicationUser>(user).State = EntityState.Modified;
         }
     }
 }

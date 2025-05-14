@@ -1,4 +1,4 @@
-﻿namespace SocialMedia.Helpers
+﻿namespace SocialMedia.DTOs
 {
     public class LoginResponse
     {

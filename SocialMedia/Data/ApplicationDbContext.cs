@@ -16,6 +16,8 @@ namespace SocialMedia.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationUserConnection> UserConnections { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+
 
     }
 }

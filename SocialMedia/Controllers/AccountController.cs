@@ -1,20 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.IdentityModel.Tokens;
-using SocialMedia.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using SocialMedia.DTOs;
-using SocialMedia.Models;
 using SocialMedia.Repositories;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace SocialMedia.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -22,33 +12,36 @@ namespace SocialMedia.Controllers
 
         public AccountController(IApplicationUserRepo UserRepo)
         {
-            _UserRepo=UserRepo;
+            _UserRepo = UserRepo;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return UnprocessableEntity(ModelState);
 
-            var result= await _UserRepo.Register(registerDto);
+            var result = await _UserRepo.Register(registerDto);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return CreatedAtAction(nameof(Register), registerDto);
             }
-            
-            return BadRequest(result.Errors.Select(e => e.Description).ToList());
+
+            var error = result.Errors.Select(e => e.Description).ToList();
+            var code = UnprocessableEntity().StatusCode;
+
+            return UnprocessableEntity(new { code = code, error = error });
 
         }
 
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginRequest)
         {
             if (!ModelState.IsValid)
-                 return BadRequest(ModelState);
-            
+                return UnprocessableEntity(ModelState);
+
             var result = await _UserRepo.Login(loginRequest);
 
             if (result == null)
@@ -57,5 +50,5 @@ namespace SocialMedia.Controllers
             return Ok(result);
         }
     }
-    
+
 }
