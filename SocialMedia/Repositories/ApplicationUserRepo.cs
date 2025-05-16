@@ -14,33 +14,45 @@ namespace SocialMedia.Repositories
     public class ApplicationUserRepo : IApplicationUserRepo
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configure;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
-        public ApplicationUserRepo(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configure, IMapper mapper)
+        public ApplicationUserRepo(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configure, IMapper mapper)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _configure = configure;
             _mapper = mapper;
             _context = context;
+
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetUsersAsync()
+
+        public async Task<IEnumerable<MemberDto>> GetMembersAsync()
         {
-            var users = await _context.ApplicationUsers.ToListAsync();
-            return users;
+            var users = await _context.ApplicationUsers.Include(u => u.Photos).ToListAsync();
+            var mappedUsers = _mapper.Map<IEnumerable<MemberDto>>(users);
+            return mappedUsers;
         }
 
-        public async Task<ApplicationUser> GetUserById(int id)
+        public async Task<ApplicationUser> GetUserByIdAsync(int id)
         {
-            return await _context.ApplicationUsers.FindAsync(id);
+            return await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync();
         }
 
-        public async Task<ApplicationUser> GetUserByName(string name)
+        public async Task<MemberDto> GetMemberByNameAsync(string name)
         {
-            return await _context.ApplicationUsers.SingleOrDefaultAsync(u => u.UserName == name);
+            var user = await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync(u => u.UserName == name);
+            var mappedUser = _mapper.Map<MemberDto>(user);
+            return mappedUser;
         }
+        public async Task<ApplicationUser> GetUserByNameAsync(string name)
+        {
+            var user = await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync(u => u.UserName == name);
 
+            return user;
+        }
 
         public async Task<LoginResponse> Login(LoginDto loginDto)
         {
@@ -103,6 +115,16 @@ namespace SocialMedia.Repositories
         public void Update(ApplicationUser user)
         {
             _context.Entry<ApplicationUser>(user).State = EntityState.Modified;
+        }
+
+        public async Task LogOut()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        public async Task<int> SaveAllChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
     }
 }

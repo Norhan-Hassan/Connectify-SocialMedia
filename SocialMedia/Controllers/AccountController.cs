@@ -49,6 +49,14 @@ namespace SocialMedia.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _UserRepo.LogOut();
+
+            return Ok("You Logged out successfully");
+        }
     }
 
 }

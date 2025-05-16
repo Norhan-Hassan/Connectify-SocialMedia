@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using SocialMedia.DTOs;
 using SocialMedia.Models;
-using System.Collections.Generic;
 
 namespace SocialMedia.Repositories
 {
@@ -11,11 +9,14 @@ namespace SocialMedia.Repositories
 
         Task<IdentityResult> Register(RegisterDto registerDto);
         Task<LoginResponse> Login(LoginDto loginDto);
-
-        Task<ApplicationUser> GetUserById(int id);
-        Task<ApplicationUser> GetUserByName(string name);
-        Task<IEnumerable<ApplicationUser>> GetUsersAsync();
+        Task LogOut();
+        Task<ApplicationUser> GetUserByIdAsync(int id);
+        Task<ApplicationUser> GetUserByNameAsync(string name);
+        Task<MemberDto> GetMemberByNameAsync(string name);
+        Task<IEnumerable<MemberDto>> GetMembersAsync();
 
         void Update(ApplicationUser user);
+
+        Task<int> SaveAllChangesAsync();
     }
 }

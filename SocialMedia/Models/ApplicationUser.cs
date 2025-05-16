@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SocialMedia.Extensions;
 
 namespace SocialMedia.Models
 {
@@ -18,9 +17,9 @@ namespace SocialMedia.Models
         public ICollection<Photo> Photos { get; set; }
 
 
-        public int GetUserAge()
-        {
-            return DateOfBirth.CalculateAge();
-        }
+        //public int GetUserAge()
+        //{
+        //    return DateOfBirth.CalculateAge();
+        //}
     }
 }
