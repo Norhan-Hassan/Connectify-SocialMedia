@@ -7,9 +7,9 @@ namespace SocialMedia.Models
     {
         [Key]
         public int ID { get; set; }
-        public int PublicId { get; set; }
+        public string PublicId { get; set; }
         public string PhotoUrl { get; set; }
-        public string? Description {  get; set; }
+        public string? Description { get; set; }
         public bool IsMainPhoto { get; set; }
 
 

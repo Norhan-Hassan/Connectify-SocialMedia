@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialMedia.Data;
+using SocialMedia.Helpers;
 using SocialMedia.Mapping;
 using SocialMedia.Models;
 using SocialMedia.Repos;
 using SocialMedia.Repositories;
+using SocialMedia.Services;
 using System.Text;
 
 namespace SocialMedia.Dependencies
@@ -23,9 +25,12 @@ namespace SocialMedia.Dependencies
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<IChatRepo, ChatRepo>();
             services.AddTransient<IApplicationUserRepo, ApplicationUserRepo>();
+            services.AddTransient<IPhotoService, PhotoService>();
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
 
             return services;
 
