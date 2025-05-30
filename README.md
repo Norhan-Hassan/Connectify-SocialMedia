@@ -13,6 +13,7 @@ This API offers a rich set of real-time and interactive social media features po
 ### ✍️ Posts & Reactions
 - **📝 Post Creation:** Users can create textual or image-based posts to share thoughts and updates.  
 - **👍 React & Engage:** React to posts with likes or other reactions, fostering community interaction and feedback.
+- **👉🏻 Pokes:** Poke another user and see poked users
 
 ### 🟢 User Presence
 - **📡 Online Status:** Track and display whether users are currently online for real-time presence awareness.  
