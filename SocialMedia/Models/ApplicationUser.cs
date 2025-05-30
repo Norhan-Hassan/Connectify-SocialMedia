@@ -15,7 +15,8 @@ namespace SocialMedia.Models
         public DateTime LastActive { get; set; } = DateTime.UtcNow;
         public Gender Gender { get; set; }
         public ICollection<Photo> Photos { get; set; }
-
+        public ICollection<UserPoke> PokedByUsers { get; set; }
+        public ICollection<UserPoke> PokedUsers { get; set; }
 
         //public int GetUserAge()
         //{

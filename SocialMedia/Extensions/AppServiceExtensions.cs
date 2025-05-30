@@ -26,6 +26,8 @@ namespace SocialMedia.Dependencies
             services.AddTransient<IChatRepo, ChatRepo>();
             services.AddTransient<IApplicationUserRepo, ApplicationUserRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
+            services.AddScoped<LogUserActivity>();
+            services.AddTransient<IPokesRepo, PokesRepo>();
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();

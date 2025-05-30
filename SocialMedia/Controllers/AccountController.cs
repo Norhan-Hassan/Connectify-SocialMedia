@@ -4,9 +4,7 @@ using SocialMedia.Repositories;
 
 namespace SocialMedia.Controllers
 {
-    [Route("api/account")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseApiController
     {
         private readonly IApplicationUserRepo _UserRepo;
 

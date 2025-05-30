@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.DTOs;
 using SocialMedia.Extensions;
+using SocialMedia.Helpers;
 using SocialMedia.Models;
 using SocialMedia.Repositories;
 using SocialMedia.Services;
@@ -10,9 +11,7 @@ using SocialMedia.Services;
 namespace SocialMedia.Controllers
 {
     [Authorize]
-    [Route("api/user")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseApiController
     {
         private readonly IApplicationUserRepo _userRepo;
         private readonly IMapper _mapper;
@@ -25,10 +24,12 @@ namespace SocialMedia.Controllers
         }
 
         [HttpGet("List")]
-        public async Task<IActionResult> GetAllUsers()
+        public IActionResult GetAllUsers([FromQuery] UserParams userParams)
         {
-            var users = await _userRepo.GetMembersAsync();
-
+            var userName = User.GetCurrentUserName();
+            userParams.CurrentUserName = userName;
+            var users = _userRepo.GetMembers(userParams);
+            Response.AddPagenationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
             return Ok(users);
         }
 
@@ -88,6 +89,63 @@ namespace SocialMedia.Controllers
                 return Created("Photo Uploaded Successfully", photodto);
             }
             return BadRequest("Not Able To Add This Photo");
+        }
+
+        [HttpPut("change-main-photo/{photoId:int}")]
+        public async Task<IActionResult> SetMainPhoto(int photoId)
+        {
+            var userName = User.GetCurrentUserName();
+            var user = await _userRepo.GetUserByNameAsync(userName);
+
+            var photo = user.Photos.FirstOrDefault(p => p.ID == photoId);
+            if (photo.IsMainPhoto == true)
+            {
+                return BadRequest("This is already your main photo");
+            }
+            var currentMainPhoto = user.Photos.FirstOrDefault(p => p.IsMainPhoto == true);
+            if (currentMainPhoto != null)
+            {
+                currentMainPhoto.IsMainPhoto = false;
+            }
+            photo.IsMainPhoto = true;
+
+            if (await _userRepo.SaveAllChangesAsync() > 0)
+            {
+                return Ok("Main photo is changed");
+            }
+            return BadRequest("Failed to change main photo");
+        }
+
+        [HttpDelete("delete-photo/{photoId:int}")]
+
+        public async Task<IActionResult> DeletePhoto(int photoId)
+        {
+            var userName = User.GetCurrentUserName();
+            var user = await _userRepo.GetUserByNameAsync(userName);
+
+            var photo = user.Photos.FirstOrDefault(p => p.ID == photoId);
+            if (photo == null)
+            {
+                return NotFound("No photo with this id");
+            }
+            if (photo.IsMainPhoto == true)
+            {
+                return BadRequest("You can't delete your main photo");
+            }
+            if (photo.PublicId != null)
+            {
+                var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+                if (result.Error != null)
+                {
+                    return BadRequest(result.Error.Message);
+                }
+                user.Photos.Remove(photo);
+                if (await _userRepo.SaveAllChangesAsync() > 0)
+                {
+                    return Ok("Photo deleted successfully");
+                }
+            }
+            return BadRequest("Failed to delete this photo");
         }
     }
 }

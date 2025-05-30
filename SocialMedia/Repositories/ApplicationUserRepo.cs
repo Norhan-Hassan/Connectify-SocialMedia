@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SocialMedia.Data;
 using SocialMedia.DTOs;
+using SocialMedia.Helpers;
 using SocialMedia.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -29,14 +30,15 @@ namespace SocialMedia.Repositories
         }
 
 
-        public async Task<IEnumerable<MemberDto>> GetMembersAsync()
+        public PagedList<MemberDto> GetMembers(UserParams userParams)
         {
-            var users = await _context.ApplicationUsers.Include(u => u.Photos).ToListAsync();
-            var mappedUsers = _mapper.Map<IEnumerable<MemberDto>>(users);
-            return mappedUsers;
+            var users = _context.ApplicationUsers.Include(u => u.Photos).AsNoTracking().AsQueryable();
+            var otherUsers = users.Where(u => u.UserName != userParams.CurrentUserName).ToList();
+            var mappedUsers = _mapper.Map<IEnumerable<MemberDto>>(otherUsers);
+            return PagedList<MemberDto>.Create(mappedUsers, userParams.PageNumber, userParams.PageSize);
         }
 
-        public async Task<ApplicationUser> GetUserByIdAsync(int id)
+        public async Task<ApplicationUser> GetUserByIdAsync(string id)
         {
             return await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync();
         }
@@ -66,7 +68,7 @@ namespace SocialMedia.Repositories
                     claims.Add(new Claim(ClaimTypes.NameIdentifier, applicationUser.Id));
                     claims.Add(new Claim(ClaimTypes.Name, applicationUser.UserName));
 
-                    //generate dynamic token for every request according to using guid
+
                     claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
 
@@ -126,5 +128,7 @@ namespace SocialMedia.Repositories
         {
             return await _context.SaveChangesAsync();
         }
+
+
     }
 }

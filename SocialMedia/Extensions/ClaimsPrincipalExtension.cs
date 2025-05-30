@@ -9,5 +9,11 @@ namespace SocialMedia.Extensions
             var userName = user.FindFirst(ClaimTypes.Name)?.Value;
             return userName ?? string.Empty;
         }
+
+        public static string GetCurrentUserID(this ClaimsPrincipal user)
+        {
+            var userID = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return userID ?? string.Empty;
+        }
     }
 }

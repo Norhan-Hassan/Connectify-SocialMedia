@@ -15,6 +15,7 @@ namespace SocialMedia.Services
                  configuration.Value.ApiKey,
                  configuration.Value.ApiSecret
              );
+
             _cloudinary = new Cloudinary(account);
 
         }
@@ -30,7 +31,6 @@ namespace SocialMedia.Services
                     Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity(Gravity.Face),
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
-
             }
             return uploadResult;
         }
