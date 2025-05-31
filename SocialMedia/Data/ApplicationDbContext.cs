@@ -18,6 +18,7 @@ namespace SocialMedia.Data
         public DbSet<ApplicationUserConnection> UserConnections { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<UserPoke> Pokes { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +35,13 @@ namespace SocialMedia.Data
                                       .HasForeignKey(s => s.pokedUserId)
                                       .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<Message>().HasOne(u => u.ReceiverUser)
+                                     .WithMany(u => u.MessagesReceived)
+                                     .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>().HasOne(u => u.SenderUser)
+                                     .WithMany(u => u.MessagesSent)
+                                     .OnDelete(DeleteBehavior.Restrict);
 
 
         }

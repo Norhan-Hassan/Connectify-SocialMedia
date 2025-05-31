@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialMedia.Data;
 using SocialMedia.DTOs;
+using SocialMedia.Helpers;
 using SocialMedia.Models;
 
 namespace SocialMedia.Repositories
@@ -20,30 +21,32 @@ namespace SocialMedia.Repositories
             return userpoke;
         }
 
-        public async Task<IEnumerable<PokeDto>> GetUserPokesAsync(string predicate, string userId)
+        public async Task<PagedList<PokeDto>> GetUserPokesAsync(PokesParams pokesParams)
         {
             var users = _context.ApplicationUsers.OrderBy(u => u.UserName).AsQueryable();
             var pokes = _context.Pokes.AsQueryable();
-            if (predicate == "Poked")
+            if (pokesParams.Predicate.ToLower() == "poked")
             {
-                pokes = pokes.Where(p => p.sourceUserId == userId);
+                pokes = pokes.Where(p => p.sourceUserId == pokesParams.UserId);
                 users = pokes.Select(p => p.PokedUser);
             }
 
-            if (predicate == "PokedBy")
+            if (pokesParams.Predicate.ToLower() == "pokedby")
             {
-                pokes = pokes.Where(p => p.pokedUserId == userId);
+                pokes = pokes.Where(p => p.pokedUserId == pokesParams.UserId);
                 users = pokes.Select(p => p.SourceUser);
             }
-            return await users.Select(user => new PokeDto
+            var retunedUsers = users.Select(user => new PokeDto
             {
                 UserName = user.UserName,
                 PhotoUrl = user.Photos.FirstOrDefault(u => u.IsMainPhoto == true).PhotoUrl
 
-            }).ToListAsync();
+            });
+            return PagedList<PokeDto>.Create(retunedUsers, pokesParams.PageNumber, pokesParams.PageSize);
+
         }
 
-        public async Task<ApplicationUser> GetUserWithLikes(string userId)
+        public async Task<ApplicationUser> GetUserWithPokesAsync(string userId)
         {
             return await _context.ApplicationUsers.Include(u => u.PokedUsers).FirstOrDefaultAsync(u => u.Id == userId);
         }

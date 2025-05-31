@@ -28,6 +28,7 @@ namespace SocialMedia.Dependencies
             services.AddTransient<IPhotoService, PhotoService>();
             services.AddScoped<LogUserActivity>();
             services.AddTransient<IPokesRepo, PokesRepo>();
+            services.AddTransient<IMessageRepo, MessageRepo>();
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();

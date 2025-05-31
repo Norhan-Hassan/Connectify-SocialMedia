@@ -24,7 +24,16 @@ namespace SocialMedia.Mapping
 
             #endregion
 
+            #region Photo Mapping
             CreateMap<Photo, PhotoDto>();
+            #endregion
+
+            #region Message Mapping
+            CreateMap<Message, MessageDto>()
+                .ForMember(dest => dest.senderPhotoUrl, opt => opt.MapFrom(src => src.SenderUser.Photos.FirstOrDefault(p => p.IsMainPhoto == true).PhotoUrl))
+               .ForMember(dest => dest.receiverPhotoUrl, opt => opt.MapFrom(src => src.ReceiverUser.Photos.FirstOrDefault(p => p.IsMainPhoto == true).PhotoUrl));
+            #endregion
         }
+
     }
 }

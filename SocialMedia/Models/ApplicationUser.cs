@@ -18,6 +18,9 @@ namespace SocialMedia.Models
         public ICollection<UserPoke> PokedByUsers { get; set; }
         public ICollection<UserPoke> PokedUsers { get; set; }
 
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesReceived { get; set; }
+
         //public int GetUserAge()
         //{
         //    return DateOfBirth.CalculateAge();

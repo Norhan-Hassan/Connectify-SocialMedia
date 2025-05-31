@@ -1,11 +1,13 @@
-﻿using SocialMedia.Models;
+﻿using SocialMedia.DTOs;
+using SocialMedia.Helpers;
+using SocialMedia.Models;
 
 namespace SocialMedia.Repositories
 {
     public interface IPokesRepo
     {
         Task<UserPoke> GetUserPokeAsync(string sourceUserId, string pokedUserId);
-        Task<IEnumerable<PokeDto>> GetUserPokesAsync(string predicate, string userId);
-        Task<ApplicationUser> GetUserWithLikes(string userId);
+        Task<PagedList<PokeDto>> GetUserPokesAsync(PokesParams pokesParams);
+        Task<ApplicationUser> GetUserWithPokesAsync(string userId);
     }
 }
