@@ -12,15 +12,21 @@ namespace SocialMedia.Controllers
     [Authorize]
     public class MessageController : BaseApiController
     {
+        #region fields
         private readonly IMessageRepo _messageRepo;
         private readonly IApplicationUserRepo _userRepo;
         private readonly IMapper _mapper;
+        #endregion
+        #region constructor
         public MessageController(IMessageRepo messageRepo, IApplicationUserRepo userRepo, IMapper mapper)
         {
             _messageRepo = messageRepo;
             _mapper = mapper;
             _userRepo = userRepo;
         }
+        #endregion
+
+        #region endpoints
 
         [HttpPost]
         public async Task<IActionResult> AddMessage(CreateMessageDto messageDto)
@@ -38,6 +44,7 @@ namespace SocialMedia.Controllers
                 SenderUser = sender,
                 ReceiverUser = receiver,
                 Content = messageDto.Content
+
             };
             _messageRepo.AddMessage(message);
             if (await _messageRepo.SaveAllChangesAsync() > 0)
@@ -60,7 +67,45 @@ namespace SocialMedia.Controllers
         public async Task<IActionResult> GetMessageThread(string userName)
         {
             var currentUserName = User.GetCurrentUserName();
-            return Ok(await _messageRepo.GetMessagesAsync(currentUserName, userName));
+            return Ok(await _messageRepo.GetMessagesThreadAsync(currentUserName, userName));
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteMessage(int id)
+        {
+            var currentUserName = User.GetCurrentUserName();
+            var message = await _messageRepo.GetMessageByIdAsync(id);
+            if (message == null)
+            {
+                return NotFound("No message with this id");
+            }
+
+            if (message.SenderUser.UserName != currentUserName
+              && message.ReceiverUser.UserName != currentUserName)
+            {
+                return Unauthorized("You are not alowed to do this action");
+            }
+            //check for the side of deletion
+            if (message.SenderUser.UserName == currentUserName)
+            {
+                message.SenderDeleted = true;
+            }
+            if (message.ReceiverUser.UserName == currentUserName)
+            {
+                message.ReceiverDeleted = true;
+            }
+            if (message.ReceiverDeleted && message.SenderDeleted)
+            {
+                _messageRepo.DeleteMessage(message);
+            }
+
+            if (await _messageRepo.SaveAllChangesAsync() > 0)
+            {
+                return Ok("Message deleted successfully");
+            }
+            return BadRequest("Failed To delete this message");
+
+        }
+        #endregion
     }
 }

@@ -39,12 +39,12 @@ namespace SocialMedia
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
-            app.UseCors(p => p.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+            app.UseCors(p => p.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapHub<ChatHub>("Chat");
-            app.MapHub<PostHub>("Post");
+            app.MapHub<ChatHub>("hub/chat");
+            app.MapHub<PresenceHub>("hub/presence");
 
             app.MapControllers();
 

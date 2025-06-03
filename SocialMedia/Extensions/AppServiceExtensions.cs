@@ -23,7 +23,7 @@ namespace SocialMedia.Dependencies
                 option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddTransient<IPostRepo, PostRepo>();
-            services.AddTransient<IChatRepo, ChatRepo>();
+            services.AddTransient<IPresenceTracker, PresenceTracker>();
             services.AddTransient<IApplicationUserRepo, ApplicationUserRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
             services.AddScoped<LogUserActivity>();
@@ -62,6 +62,19 @@ namespace SocialMedia.Dependencies
                     new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["JWT:key"]))
                 };
+                options.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
             return services;
         }
@@ -70,12 +83,12 @@ namespace SocialMedia.Dependencies
         {
             services.AddSwaggerGen(opt =>
             {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication", Version = "v1" });
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Connectify", Version = "v1" });
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
                     Description = "Please enter token",
-                    Name = "Authentication",
+                    Name = "Connectify",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
                     Scheme = "bearer"

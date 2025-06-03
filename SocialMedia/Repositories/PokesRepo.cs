@@ -8,12 +8,21 @@ namespace SocialMedia.Repositories
 {
     public class PokesRepo : IPokesRepo
     {
-        private readonly ApplicationDbContext _context;
 
+        #region fields
+        private readonly ApplicationDbContext _context;
+        #endregion
+
+
+        #region constructor
         public PokesRepo(ApplicationDbContext context)
         {
             _context = context;
         }
+        #endregion
+
+
+        #region Methods
 
         public async Task<UserPoke> GetUserPokeAsync(string sourceUserId, string pokedUserId)
         {
@@ -50,5 +59,6 @@ namespace SocialMedia.Repositories
         {
             return await _context.ApplicationUsers.Include(u => u.PokedUsers).FirstOrDefaultAsync(u => u.Id == userId);
         }
+        #endregion
     }
 }

@@ -10,17 +10,21 @@ namespace SocialMedia.Controllers
     [Authorize]
     public class PokesController : BaseApiController
     {
+        #region fields
         private readonly IPokesRepo _pokesRepo;
         private readonly IApplicationUserRepo _userRepo;
-
+        #endregion
+        #region constructor
         public PokesController(IPokesRepo pokesRepo, IApplicationUserRepo userRepo)
         {
             _pokesRepo = pokesRepo;
             _userRepo = userRepo;
         }
+        #endregion
+
+        #region endpoints
 
         [HttpPost("{UserName:alpha}")]
-
         public async Task<IActionResult> AddPoke(string UserName)
         {
             var sourceUserId = User.GetCurrentUserID();
@@ -56,5 +60,6 @@ namespace SocialMedia.Controllers
             if (users == null) { return NotFound("No Pokes For This user"); }
             return Ok(users);
         }
+        #endregion
     }
 }

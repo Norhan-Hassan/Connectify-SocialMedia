@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMedia.Data;
 
@@ -11,9 +12,11 @@ using SocialMedia.Data;
 namespace SocialMedia.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250531185859_add-group-Entity")]
+    partial class addgroupEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,38 +344,6 @@ namespace SocialMedia.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("SocialMedia.Models.Post", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAnonymous")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("applicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("applicationUserId");
-
-                    b.ToTable("Posts");
-                });
-
             modelBuilder.Entity("SocialMedia.Models.UserPoke", b =>
                 {
                     b.Property<string>("pokedUserId")
@@ -517,17 +488,6 @@ namespace SocialMedia.Migrations
                     b.Navigation("applicationUser");
                 });
 
-            modelBuilder.Entity("SocialMedia.Models.Post", b =>
-                {
-                    b.HasOne("SocialMedia.Models.ApplicationUser", "applicationUser")
-                        .WithMany("Posts")
-                        .HasForeignKey("applicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("applicationUser");
-                });
-
             modelBuilder.Entity("SocialMedia.Models.UserPoke", b =>
                 {
                     b.HasOne("SocialMedia.Models.ApplicationUser", "PokedUser")
@@ -563,8 +523,6 @@ namespace SocialMedia.Migrations
                     b.Navigation("PokedByUsers");
 
                     b.Navigation("PokedUsers");
-
-                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

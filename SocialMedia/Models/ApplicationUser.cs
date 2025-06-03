@@ -21,6 +21,8 @@ namespace SocialMedia.Models
         public ICollection<Message> MessagesSent { get; set; }
         public ICollection<Message> MessagesReceived { get; set; }
 
+        public ICollection<Post> Posts { get; set; }
+
         //public int GetUserAge()
         //{
         //    return DateOfBirth.CalculateAge();

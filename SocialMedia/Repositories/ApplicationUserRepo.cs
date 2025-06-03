@@ -14,11 +14,15 @@ namespace SocialMedia.Repositories
 {
     public class ApplicationUserRepo : IApplicationUserRepo
     {
+        #region fields
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configure;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
+        #endregion
+
+        #region constructor
         public ApplicationUserRepo(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configure, IMapper mapper)
         {
             _userManager = userManager;
@@ -29,7 +33,9 @@ namespace SocialMedia.Repositories
 
         }
 
+        #endregion
 
+        #region Methods
         public PagedList<MemberDto> GetMembers(UserParams userParams)
         {
             var users = _context.ApplicationUsers.Include(u => u.Photos).AsNoTracking().AsQueryable();
@@ -129,6 +135,6 @@ namespace SocialMedia.Repositories
             return await _context.SaveChangesAsync();
         }
 
-
+        #endregion
     }
 }

@@ -13,16 +13,22 @@ namespace SocialMedia.Controllers
     [Authorize]
     public class UserController : BaseApiController
     {
+        #region fields
         private readonly IApplicationUserRepo _userRepo;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
+        #endregion
+
+        #region constructor
         public UserController(IApplicationUserRepo userRepo, IMapper mapper, IPhotoService photoService)
         {
             _userRepo = userRepo;
             _mapper = mapper;
             _photoService = photoService;
         }
+        #endregion
 
+        #region endpoints
         [HttpGet("List")]
         public IActionResult GetAllUsers([FromQuery] UserParams userParams)
         {
@@ -147,5 +153,6 @@ namespace SocialMedia.Controllers
             }
             return BadRequest("Failed to delete this photo");
         }
+        #endregion
     }
 }

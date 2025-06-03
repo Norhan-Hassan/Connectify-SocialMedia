@@ -6,13 +6,19 @@ namespace SocialMedia.Controllers
 {
     public class AccountController : BaseApiController
     {
+        #region fields
         private readonly IApplicationUserRepo _UserRepo;
+        #endregion
 
+        #region constructor
         public AccountController(IApplicationUserRepo UserRepo)
         {
             _UserRepo = UserRepo;
         }
+        #endregion
 
+
+        #region endpoints
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
@@ -55,6 +61,7 @@ namespace SocialMedia.Controllers
 
             return Ok("You Logged out successfully");
         }
+        #endregion
     }
 
 }
