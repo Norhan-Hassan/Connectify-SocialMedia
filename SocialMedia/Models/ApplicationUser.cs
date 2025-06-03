@@ -6,9 +6,7 @@ namespace SocialMedia.Models
     {
         public string Country { get; set; }
         public string City { get; set; }
-
         public string? Bio { get; set; }
-
         public string? KnownAs { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -17,15 +15,10 @@ namespace SocialMedia.Models
         public ICollection<Photo> Photos { get; set; }
         public ICollection<UserPoke> PokedByUsers { get; set; }
         public ICollection<UserPoke> PokedUsers { get; set; }
-
         public ICollection<Message> MessagesSent { get; set; }
         public ICollection<Message> MessagesReceived { get; set; }
-
         public ICollection<Post> Posts { get; set; }
 
-        //public int GetUserAge()
-        //{
-        //    return DateOfBirth.CalculateAge();
-        //}
+
     }
 }

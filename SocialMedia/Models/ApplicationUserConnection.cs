@@ -8,9 +8,11 @@ namespace SocialMedia.Models
         [Key]
         public string ConnectionID { get; set; }
 
+
         [ForeignKey(nameof(applicationUser))]
         public string ApplicationUserId { get; set; }
         public ApplicationUser applicationUser { get; set; }
+
 
         [ForeignKey(nameof(Group))]
         public int GroupID { get; set; }
