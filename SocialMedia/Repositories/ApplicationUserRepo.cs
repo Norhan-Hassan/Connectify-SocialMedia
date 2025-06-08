@@ -55,6 +55,7 @@ namespace SocialMedia.Repositories
             return await _context.ApplicationUsers
                                  .Include(u => u.Photos)
                                  .Include(u => u.Posts)
+                                 .Include(u => u.Reactions)
                                  .SingleOrDefaultAsync(u => u.Id == id);
         }
 

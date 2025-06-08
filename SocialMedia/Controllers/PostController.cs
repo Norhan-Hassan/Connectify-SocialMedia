@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.DTOs;
 using SocialMedia.Extensions;
@@ -8,6 +9,7 @@ using SocialMedia.Repositories;
 
 namespace SocialMedia.Controllers
 {
+    [Authorize]
     public class PostController : BaseApiController
     {
         private readonly IPostRepo _postRepo;

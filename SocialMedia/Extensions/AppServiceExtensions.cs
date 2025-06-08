@@ -29,6 +29,7 @@ namespace SocialMedia.Dependencies
             services.AddScoped<LogUserActivity>();
             services.AddTransient<IPokesRepo, PokesRepo>();
             services.AddTransient<IMessageRepo, MessageRepo>();
+            services.AddTransient<IReactRepo, ReactRepo>();
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();

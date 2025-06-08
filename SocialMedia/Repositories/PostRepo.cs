@@ -31,7 +31,7 @@ namespace SocialMedia.Repos
 
         public async Task<Post> GetPostAync(int postId)
         {
-            var post = await _context.Posts.Include(p => p.applicationUser).FirstOrDefaultAsync(p => p.ID == postId);
+            var post = await _context.Posts.Include(p => p.applicationUser).Include(p => p.Reactions).FirstOrDefaultAsync(p => p.ID == postId);
             if (post == null) { return null; }
             return post;
         }
