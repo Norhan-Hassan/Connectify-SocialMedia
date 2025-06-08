@@ -1,3 +1,7 @@
+![image](https://github.com/user-attachments/assets/ffd2de00-3e24-47e6-939a-38e327db9e08)
+
+
+
 #  Social Media API Features
 
 This API offers a rich set of real-time and interactive social media features powered by **SignalR** and **Cloudinary**:
