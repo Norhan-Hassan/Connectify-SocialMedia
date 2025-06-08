@@ -21,6 +21,8 @@ namespace SocialMedia.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Reaction> Reactions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

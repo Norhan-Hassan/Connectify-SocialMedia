@@ -132,7 +132,7 @@ namespace SocialMedia.HUBs
 
         private async Task<Group> RemoveFromMessageGroup()
         {
-            var group = await _messageRepo.GetGroupForConnection(Context.ConnectionId);
+            var group = await _messageRepo.GetGroupForConnectionAsync(Context.ConnectionId);
             var connection = group.Connections.FirstOrDefault(g => g.ConnectionID == Context.ConnectionId);
             _messageRepo.RemoveConnection(connection);
             if (await _messageRepo.SaveAllChangesAsync() > 0)

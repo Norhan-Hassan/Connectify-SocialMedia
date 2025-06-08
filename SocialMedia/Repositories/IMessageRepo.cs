@@ -10,7 +10,8 @@ namespace SocialMedia.Repositories
         Task<PagedList<MessageDto>> GetMessagesForUserAsync(MessageParams messageParams);
         Task<IEnumerable<MessageDto>> GetMessagesThreadAsync(string currentUserName, string receiverUserName);
         Task<ApplicationUserConnection> GetUserConnectionAsync(string connectionID);
-        Task<Group> GetGroupForConnection(string connectionID);
+        Task<Group> GetGroupForConnectionAsync(string connectionID);
+        Task<IEnumerable<Group>> GetGroupsForConnectionAsync(string connectionID);
         Task<Group> GetMessageGroup(string groupName);
         void AddMessage(Message message);
         void DeleteMessage(Message message);

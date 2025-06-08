@@ -8,7 +8,9 @@ namespace SocialMedia.Repos
         void AddPost(Post post);
         void DeletePost(Post post);
         Task<Post> GetPostAync(int postId);
-        Task<IEnumerable<PostDto>> GetPostsForUserAsync(string userId);
+        Task<IEnumerable<PostDto>> GetPostsForUserAsync(string userName);
+        Task Update(int postId, UpdatePostDto postDto);
+        Task<Post> GetPostForUserAsync(string userId, int postId);
         Task<int> SaveAllChangesAsync();
     }
 }

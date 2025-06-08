@@ -38,8 +38,7 @@ namespace SocialMedia.Mapping
 
             #region Post Mapping
             CreateMap<Post, PostDto>()
-                .ForMember(dest => dest.IsAnonymous, opt => opt.MapFrom(src => src.applicationUser.UserName == null ? true : false))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.applicationUser.UserName == null ? "Anonymous" : src.applicationUser.UserName))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => (src.IsAnonymous == true) ? "Anonymous User" : src.applicationUser.UserName))
                 .ReverseMap();
             #endregion
         }

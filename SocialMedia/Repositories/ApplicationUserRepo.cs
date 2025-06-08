@@ -23,7 +23,10 @@ namespace SocialMedia.Repositories
         #endregion
 
         #region constructor
-        public ApplicationUserRepo(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configure, IMapper mapper)
+        public ApplicationUserRepo(ApplicationDbContext context,
+                                    UserManager<ApplicationUser> userManager,
+                                    SignInManager<ApplicationUser> signInManager,
+                                    IConfiguration configure, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,7 +41,10 @@ namespace SocialMedia.Repositories
         #region Methods
         public PagedList<MemberDto> GetMembers(UserParams userParams)
         {
-            var users = _context.ApplicationUsers.Include(u => u.Photos).AsNoTracking().AsQueryable();
+            var users = _context.ApplicationUsers.Include(u => u.Photos)
+                                                 .AsNoTracking()
+                                                 .AsQueryable();
+
             var otherUsers = users.Where(u => u.UserName != userParams.CurrentUserName).ToList();
             var mappedUsers = _mapper.Map<IEnumerable<MemberDto>>(otherUsers);
             return PagedList<MemberDto>.Create(mappedUsers, userParams.PageNumber, userParams.PageSize);
@@ -46,18 +52,22 @@ namespace SocialMedia.Repositories
 
         public async Task<ApplicationUser> GetUserByIdAsync(string id)
         {
-            return await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync();
+            return await _context.ApplicationUsers
+                                 .Include(u => u.Photos)
+                                 .Include(u => u.Posts)
+                                 .SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<MemberDto> GetMemberByNameAsync(string name)
         {
-            var user = await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync(u => u.UserName == name);
+            var user = await _context.ApplicationUsers.Include(u => u.Photos)
+                                                       .SingleOrDefaultAsync(u => u.UserName == name);
             var mappedUser = _mapper.Map<MemberDto>(user);
             return mappedUser;
         }
         public async Task<ApplicationUser> GetUserByNameAsync(string name)
         {
-            var user = await _context.ApplicationUsers.Include(u => u.Photos).SingleOrDefaultAsync(u => u.UserName == name);
+            var user = await _context.ApplicationUsers.Include(u => u.Photos).FirstOrDefaultAsync(u => u.UserName == name);
 
             return user;
         }

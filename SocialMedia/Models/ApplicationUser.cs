@@ -18,6 +18,7 @@ namespace SocialMedia.Models
         public ICollection<Message> MessagesSent { get; set; }
         public ICollection<Message> MessagesReceived { get; set; }
         public ICollection<Post> Posts { get; set; }
+        public ICollection<Reaction> Reactions { get; set; }
 
 
     }

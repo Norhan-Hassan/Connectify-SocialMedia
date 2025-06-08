@@ -36,8 +36,10 @@ namespace SocialMedia.Repositories
 
         public async Task<Message> GetMessageByIdAsync(int id)
         {
-            return await _context.Messages.Include(u => u.SenderUser).Include(u => u.ReceiverUser)
-               .SingleOrDefaultAsync(m => m.ID == id);
+            var message = await _context.Messages.Include(u => u.SenderUser)
+                                          .Include(u => u.ReceiverUser)
+                                          .SingleOrDefaultAsync(m => m.ID == id);
+            return message;
         }
 
         public async Task<IEnumerable<MessageDto>> GetMessagesThreadAsync(string currentUserName, string receiverUserName)
@@ -49,6 +51,7 @@ namespace SocialMedia.Repositories
                         m => m.SenderUser.UserName == currentUserName && m.ReceiverUser.UserName == receiverUserName && m.ReceiverDeleted == false
                         ||
                         m.ReceiverUser.UserName == currentUserName && m.SenderUser.UserName == receiverUserName && m.SenderDeleted == false
+
                 ).OrderBy(m => m.SentAt)
                 .ToListAsync();
 
@@ -75,7 +78,7 @@ namespace SocialMedia.Repositories
             {
                 "Inbox" => messages.Where(u => u.receiverUserName == messageParams.UserName && u.ReceiverDeleted == false),
                 "Outbox" => messages.Where(u => u.senderUserName == messageParams.UserName && u.SenderDeleted == false),
-                _ => messages.Where(u => u.receiverUserName == messageParams.UserName && u.ReceiverDeleted == false && u.ReadAt == null)
+                _ => messages.Where(u => u.receiverUserName == messageParams.UserName && u.ReceiverDeleted == false && u.ReadAt == null)// unread messages
             };
 
 
@@ -107,11 +110,18 @@ namespace SocialMedia.Repositories
             _context.UserConnections.Remove(connection);
         }
 
-        public async Task<Group> GetGroupForConnection(string connectionID)
+        public async Task<Group> GetGroupForConnectionAsync(string connectionID)
         {
             return await _context.Groups.Include(g => g.Connections)
                                         .Where(g => g.Connections.Any(c => c.ConnectionID == connectionID))
                                         .FirstOrDefaultAsync();
+        }
+        public async Task<IEnumerable<Group>> GetGroupsForConnectionAsync(string connectionID)
+        {
+            var groups = await _context.Groups.Include(g => g.Connections)
+                                              .Where(g => g.Connections.Any(c => c.ConnectionID == connectionID))
+                                              .ToListAsync();
+            return groups;
         }
         #endregion
     }
