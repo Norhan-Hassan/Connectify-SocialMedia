@@ -23,6 +23,22 @@ This API offers a rich set of real-time and interactive social media features po
 - **📡 Online Status:** Track and display whether users are currently online for real-time presence awareness.  
 - **⏳ Last Online:** Store and show the last time a user was active to provide context on availability.
 
----
+## ⚙️ How to Run – Cloudinary Configuration
 
+To enable image upload and storage, follow these steps:
+
+1. 🔗 Go to [https://cloudinary.com/](https://cloudinary.com/) and sign up or log in.
+2.  From the Cloudinary Dashboard, copy the following credentials:
+   - `CloudName`
+   - `ApiKey`
+   - `ApiSecret`
+3.  Add  `appsettings.json` file in your project and add:
+
+```json
+"CloudinarySettings": {
+  "CloudName": "your_cloud_name",
+  "ApiKey": "your_api_key",
+  "ApiSecret": "your_api_secret"
+}
+```
 These features combined deliver a dynamic, engaging social media experience focused on instant communication, rich content, presence awareness, and seamless user interactions — all managed efficiently on the server side! ✨
