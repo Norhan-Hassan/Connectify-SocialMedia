@@ -15,7 +15,7 @@ This API offers a rich set of real-time and interactive social media features po
 - **☁️ Cloudinary Integration:** Seamlessly upload and manage user images via Cloudinary, providing reliable, scalable media storage and delivery.  
 
 ### ✍️ Posts & Reactions
-- **📝 Post Creation:** Users can create textual or image-based posts to share thoughts and updates.  
+- **📝 Post Creation:** Users can create textual posts to share thoughts and updates with an anonymous option.  
 - **👍 React & Engage:** React to posts with likes or other reactions.
 - **👉🏻 Pokes:** Poke another user and see poked users
 
