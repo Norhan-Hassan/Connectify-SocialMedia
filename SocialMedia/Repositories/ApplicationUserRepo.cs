@@ -62,7 +62,7 @@ namespace SocialMedia.Repositories
         public async Task<MemberDto> GetMemberByNameAsync(string name)
         {
             var user = await _context.ApplicationUsers.Include(u => u.Photos)
-                                                       .SingleOrDefaultAsync(u => u.UserName == name);
+                                                       .FirstOrDefaultAsync(u => u.UserName.ToLower() == name.ToLower());
             var mappedUser = _mapper.Map<MemberDto>(user);
             return mappedUser;
         }
@@ -145,6 +145,7 @@ namespace SocialMedia.Repositories
         {
             return await _context.SaveChangesAsync();
         }
+
 
         #endregion
     }

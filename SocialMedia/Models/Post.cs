@@ -16,5 +16,6 @@ namespace SocialMedia.Models
         public string applicationUserId { get; set; }
         public ApplicationUser applicationUser { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
+
     }
 }

@@ -22,6 +22,9 @@ namespace SocialMedia.Mapping
 
             CreateMap<MemberUpdateDto, ApplicationUser>();
 
+            CreateMap<ApplicationUser, MemberProfileDto>()
+                .ForMember(dest => dest.MainPhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMainPhoto == true).PhotoUrl)); ;
+
             #endregion
 
             #region Photo Mapping

@@ -47,6 +47,14 @@ namespace SocialMedia.Controllers
             return Ok(user);
         }
 
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var user = await _userRepo.GetUserByNameAsync(User.GetCurrentUserName());
+            var mappedUser = _mapper.Map<MemberProfileDto>(user);
+            return Ok(mappedUser);
+        }
+
         [HttpPut("update")]
         public async Task<IActionResult> UpdateUser(MemberUpdateDto updateDto)
         {
