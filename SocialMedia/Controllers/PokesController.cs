@@ -24,16 +24,20 @@ namespace SocialMedia.Controllers
 
         #region endpoints
 
-        [HttpPost("{UserName:alpha}")]
-        public async Task<IActionResult> AddPoke(string UserName)
+        [HttpPost("{userName:alpha}")]
+        public async Task<IActionResult> AddPoke(string userName)
         {
             var sourceUserId = User.GetCurrentUserID();
-            var pokedUser = await _userRepo.GetUserByNameAsync(UserName);
             var sourceUser = await _pokesRepo.GetUserWithPokesAsync(sourceUserId);
+
+            var pokedUser = await _userRepo.GetUserByNameAsync(userName);
+
             if (pokedUser == null) { return NotFound("Target User is not found "); }
-            if (sourceUser.UserName == UserName) { return BadRequest("You can't poke yourself"); }
+
+            if (sourceUser.Id == pokedUser.Id) { return BadRequest("You can't poke yourself"); }
+
             var userPoke = await _pokesRepo.GetUserPokeAsync(sourceUserId, pokedUser.Id);
-            //if (userPoke != null) { return BadRequest("You already Poke this user Before"); }
+
 
             userPoke = new UserPoke()
             {

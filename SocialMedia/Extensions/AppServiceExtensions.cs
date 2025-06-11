@@ -30,6 +30,7 @@ namespace SocialMedia.Dependencies
             services.AddTransient<IPokesRepo, PokesRepo>();
             services.AddTransient<IMessageRepo, MessageRepo>();
             services.AddTransient<IReactRepo, ReactRepo>();
+            services.AddTransient<IFollowRepo, FollowRepo>();
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();

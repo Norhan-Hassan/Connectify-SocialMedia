@@ -22,6 +22,7 @@ namespace SocialMedia.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
+        public DbSet<UserFollow> Follows { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -47,6 +48,17 @@ namespace SocialMedia.Data
                                      .WithMany(u => u.MessagesSent)
                                      .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<UserFollow>().HasKey(f => new { f.FollowerId, f.FolloweeId });
+
+            builder.Entity<UserFollow>().HasOne(f => f.Follower)
+                                        .WithMany(u => u.Followees)
+                                        .HasForeignKey(f => f.FollowerId)
+                                        .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<UserFollow>().HasOne(f => f.Followee)
+                                         .WithMany(u => u.Followers)
+                                         .HasForeignKey(f => f.FolloweeId)
+                                         .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

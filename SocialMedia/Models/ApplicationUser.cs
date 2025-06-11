@@ -20,6 +20,7 @@ namespace SocialMedia.Models
         public ICollection<Post> Posts { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
 
-
+        public ICollection<UserFollow> Followees { get; set; }
+        public ICollection<UserFollow> Followers { get; set; }
     }
 }
