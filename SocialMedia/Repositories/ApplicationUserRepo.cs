@@ -99,7 +99,7 @@ namespace SocialMedia.Repositories
                     JwtSecurityToken token = new JwtSecurityToken(
                         issuer: _configure["JWT:issuer"],
                         audience: _configure["JWT:audience"],
-                        expires: DateTime.Now.AddHours(2),
+                        expires: DateTime.Now.AddDays(5),
                         claims: claims,
                         signingCredentials: signingCredentials
                     );
