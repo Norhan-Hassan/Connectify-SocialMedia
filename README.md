@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/ffd2de00-3e24-47e6-939a-38e327db9e08)
+![image](https://github.com/user-attachments/assets/cee0c721-fadf-46da-ab7b-18e9e991d176)
 
 
 
@@ -22,6 +22,8 @@ This API offers a rich set of real-time and interactive social media features po
 ### 🟢 User Presence
 - **📡 Online Status:** Track and display whether users are currently online for real-time presence awareness.  
 - **⏳ Last Online:** Store and show the last time a user was active to provide context on availability.
+### Followers : 
+-  user can follow other users 
 
 ## ⚙️ How to Run – Cloudinary Configuration
 
