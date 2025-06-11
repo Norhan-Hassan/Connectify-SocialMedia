@@ -11,6 +11,8 @@ namespace SocialMedia.Repos
         Task<IEnumerable<PostDto>> GetPostsForUserAsync(string userName);
         Task Update(int postId, UpdatePostDto postDto);
         Task<Post> GetPostForUserAsync(string userId, int postId);
+        Task<List<PostDto>> GetUserFeedAsync(string currentUserId);
+
         Task<int> SaveAllChangesAsync();
     }
 }

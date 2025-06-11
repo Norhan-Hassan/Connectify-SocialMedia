@@ -72,5 +72,26 @@ namespace SocialMedia.Repos
                 postInDb.Content = postDto.Content;
             }
         }
+
+        public async Task<List<PostDto>> GetUserFeedAsync(string currentUserId)
+        {
+            var followedUserIds = await _context.Follows
+                                                .Where(f => f.FollowerId == currentUserId)
+                                                .Select(f => f.FolloweeId)
+                                                .ToListAsync();
+            var posts = await _context.Posts
+                                    .Where(p => followedUserIds.Contains(p.applicationUserId))
+                                    .OrderByDescending(p => p.CreatedAt)
+                                    .OrderByDescending(p => p.UpdatedAt)
+                                    .Select(p => new PostDto
+                                    {
+                                        Content = p.Content,
+                                        CreatedAt = p.CreatedAt,
+                                        UserName = p.applicationUser.UserName
+                                    })
+                                    .ToListAsync();
+
+            return posts;
+        }
     }
 }

@@ -12,14 +12,29 @@ namespace SocialMedia.Controllers
     [Authorize]
     public class PostController : BaseApiController
     {
+        #region fields
         private readonly IPostRepo _postRepo;
         private readonly IMapper _mapper;
         private readonly IApplicationUserRepo _userRepo;
+        #endregion
+
+        #region constructor
         public PostController(IPostRepo postRepo, IMapper mapper, IApplicationUserRepo applicationUser)
         {
             _postRepo = postRepo;
             _mapper = mapper;
             _userRepo = applicationUser;
+        }
+        #endregion
+
+        #region endpoints
+
+        [HttpGet("feed")]
+        public async Task<IActionResult> GetFeed()
+        {
+            var userId = User.GetCurrentUserID();
+            var posts = await _postRepo.GetUserFeedAsync(userId);
+            return Ok(posts);
         }
 
         [HttpPost]
@@ -125,5 +140,6 @@ namespace SocialMedia.Controllers
             }
 
         }
+        #endregion
     }
 }
